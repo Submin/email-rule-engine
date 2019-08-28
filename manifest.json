@@ -1,0 +1,22 @@
+{
+  "name": "Email::RuleEngine rule generator",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "minimum_chrome_version": "31",
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "permissions": [
+    {"fileSystem": ["write", "retainEntries", "directory"]},
+    "storage"
+  ],
+  "file_handlers": {
+    "text": {
+      "types": [
+          "text/*"
+      ]
+    }
+  }
+}

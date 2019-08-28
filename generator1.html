@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="css/datatables.min.css"/>
+	<script type="text/javascript" src="js/jquery-3.2.1.slim.min.js"></script>
+	<script type="text/javascript" src="js/datatables.min.js"></script>
+</head>
+
+<body class="bg-light">
+	<table class="table table-hover" id="node-pairs-container">
+		<thead>
+			<tr>
+				<th scope="col">ID</th>
+				<th scope="col" class="text-center w-100">Name</th>
+				<th scope="col" class="text-center">
+					<button type="button" id="add-pair-btn" class="btn btn-primary">+</button>
+				</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+
+	<script type="text/javascript">
+	$('#node-pairs-container').DataTable({
+		rowReorder: {
+			snapX: 3
+		},
+		paging: false,
+		searching: false,
+		info: false,
+		columnDefs: [
+			{ className: 'reorder', targets: [0, 1] },
+		],
+		createRow: function ( row, data, index ) {
+            if ( data[0] > 1 ) {
+                $('td', row).eq(0).addClass('highlight');
+            }
+        },
+		rowCallback: function( row, data, index ) {
+			var params = delete data[2];
+            if ( data.grade == "A" ) {
+               	$('td:eq(4)', row).html( '<b>A</b>' );
+            }
+        },
+		data: [
+            [0, 'one', {a: 1}],
+            [1, 'two', {a: 2}],
+            [2, 'three', {a: 3}],
+            [3, 'four', {a: 4}]
+        ]
+	});
+//	table.data([[0, 'asd', null]]);
+	var b = 1;
+
+</script>
+</body>
+</html>

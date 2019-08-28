@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Email::RuleEngine rule generator</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/ned.css">
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+</head>
+<body class="bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col text-center">
+                <h5>Email::RuleEngine rule editor</h5>
+            </div>
+        </div>
+        <div class="row h-100">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-primary btn-block" id="add-node-btn" title="Add node">+</button>
+                <button type="button" class="btn btn-primary btn-block" id="del-node-btn" title="Del node(s)">-</button>
+            </div>
+            <div class="col-sm-11 editor-container">
+                <svg id="svg" oncontextmenu="return false;"></svg>
+            </div>
+        </div>
+    </div>
+
+<!-- =============================== MODALES ========================== -->
+    <div id="error-modal-dialog" class="modal fade" tabindex="-1" data-keyboard="false" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger">Email::RuleEngine rule editor fatal error</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="error-message-container"></div>
+                </div>
+                <div class="modal-footer">
+                    Github link project&nbsp;<a href="https://github.com/Submin/Email-RuleEngine" target="_blank">Email::RuleEngine</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="init-modal-dialog" class="modal fade" tabindex="-1" data-keyboard="false" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">For start with Email::RuleEngine rule editor</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <button type="button" class="btn btn-primary form-control  btn-block choose-dir-btn" data-target="actions">Choose the Actions Directory</button>
+                                    <small class="form-text text-warning">&nbsp;</small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <button type="button" class="btn btn-primary form-control  btn-block choose-dir-btn" data-target="conditions">Choose the Conditions Directory</button>
+                                    <small class="form-text text-warning">&nbsp;</small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <small class="form-text text-muted">Now you can begin to create new rules or continue to edit existing</small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <button type="button" id="run-editor-btn" class="btn btn-secondary form-control last-action-btn" disabled>Begin edit the New Rules</button>
+                                    <small class="form-text text-warning">&nbsp;</small>
+                                </div>
+                                <div class="col-sm-6">
+                                    <button type="button" id="choose-rules-file-btn" class="btn btn-secondary form-control last-action-btn" data-target="rules"  disabled>Choose the Rules File</button>
+                                    <small class="form-text text-warning">&nbsp;</small>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    Github link project&nbsp;<a href="https://github.com/Submin/Email-RuleEngine" target="_blank">Email::RuleEngine</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="node-modal-dialog" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group row">
+                                <label for="node-name-input" class="col-sm-3 col-form-label">Node name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="node-name-input" placeholder="Please enter node name" autofocus>
+                                    <small class="form-text text-warning">&nbsp;</small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="node-title-input" class="col-sm-3 col-form-label">Node title</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="node-title-input" placeholder="Please enter node title">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <table class="table table-hover table-sortable" id="node-pairs-container">
+                        <thead>
+                            <tr>
+                                <!-- <th scope="col">ID</th> -->
+                                <th scope="col" class="text-center w-100">Name</th>
+                                <th scope="col" class="text-right">
+                                    <button type="button" id="add-pair-btn" class="btn btn-primary">+</button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="save-node-btn" type="button" class="btn btn-primary"></button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="pair-modal-dialog" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group row">
+                                <label for="pair-name-input" class="col-sm-3 col-form-label">Pair name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="pair-name-input" placeholder="Please enter pair name" autofocus>
+                                    <small class="form-text text-warning">&nbsp;</small>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="pair-desc-input" class="col-sm-3 col-form-label">Pair description</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="pair-desc-input" placeholder="Please enter pair description">
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="card card-outline-secondary">
+                                    <div class="card-header text-muted">
+                                        Conditions
+                                    </div>
+                                    <div id="pair-condition-container" class="card-block">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="card card-outline-secondary">
+                                    <div class="card-header text-muted">
+                                        Action
+                                    </div>
+                                    <div id="pair-action-container" class="card-block">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="save-pair-btn" type="button" class="btn btn-primary"></button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- =============================== SCRIPTS ========================== -->
+    <script type="text/javascript" src="js/jquery-3.2.1.slim.min.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.sortable.min.js"></script>
+    <script type="text/javascript" src="js/fs.js"></script>
+    <script type="text/javascript" src="js/ned.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+</body>
+</html>
